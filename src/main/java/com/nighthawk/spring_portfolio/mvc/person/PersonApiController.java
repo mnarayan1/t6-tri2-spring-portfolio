@@ -43,6 +43,20 @@ public class PersonApiController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
     }
 
+    @GetMapping("/addSteps/{id}/{totalSteps}")
+    public String addStepsToPerson(@PathVariable long id, @PathVariable int totalSteps) {
+        Optional<Person> optional = repository.findById(id);
+        if (optional.isPresent()) {  // Good ID
+            Person person = optional.get(); // value from findByID
+            int addStepsTotalSteps = person.addSteps(totalSteps);
+            return person.personStepsToString(addStepsTotalSteps);
+            
+        }
+        // Bad ID
+        //return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
+        return "Bad ID";
+    }
+
     /*
     DELETE individual Person using ID
      */
@@ -65,7 +79,11 @@ public class PersonApiController {
     public ResponseEntity<Object> postPerson(@RequestParam("email") String email,
                                              @RequestParam("password") String password,
                                              @RequestParam("name") String name,
-                                             @RequestParam("dob") String dobString) {
+                                             @RequestParam("dob") String dobString,
+                                             @RequestParam("height") int height,
+                                             @RequestParam("weight") double weight,
+                                             @RequestParam("goalSteps") int goalSteps,
+                                             @RequestParam("goalSteps") int totalSteps) {
         Date dob;
         try {
             dob = new SimpleDateFormat("MM-dd-yyyy").parse(dobString);
@@ -73,7 +91,7 @@ public class PersonApiController {
             return new ResponseEntity<>(dobString +" error; try MM-dd-yyyy", HttpStatus.BAD_REQUEST);
         }
         // A person object WITHOUT ID will create a new record with default roles as student
-        Person person = new Person(email, password, name, dob);
+        Person person = new Person(email, password, name, dob , height , weight, goalSteps, totalSteps);
         repository.save(person);
         return new ResponseEntity<>(email +" is created successfully", HttpStatus.CREATED);
     }
@@ -114,6 +132,13 @@ public class PersonApiController {
 
             // Set Date and Attributes to SQL HashMap
             Map<String, Map<String, Object>> date_map = new HashMap<>();
+
+            //bug fix, https://www.w3schools.com/java/java_hashmap.asp
+            // keySet gives all the keys in a Set, loop through HashMap and add all the existing dates and data to date_map
+            for (String i: person.getStats().keySet()) {
+                date_map.put(i, person.getStats().get(i));
+            }
+           
             date_map.put( (String) stat_map.get("date"), attributeMap );
             person.setStats(date_map);  // BUG, needs to be customized to replace if existing or append if new
             repository.save(person);  // conclude by writing the stats updates
