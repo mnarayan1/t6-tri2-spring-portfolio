@@ -1,5 +1,5 @@
 package com.nighthawk.spring_portfolio.mvc.calculator;
-
+import java.lang.Math;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +29,13 @@ public class Calculator {
         OPERATORS.put("%", 3);
         OPERATORS.put("+", 4);
         OPERATORS.put("-", 4);
+        OPERATORS.put("^", 1);
+        OPERATORS.put("RT", 1);
+
+
     }
+
+    
 
     // Helper definition for supported operators
     private final Map<String, Integer> SEPARATORS = new HashMap<>();
@@ -53,11 +59,37 @@ public class Calculator {
 
         // calculate reverse polish notation
         this.rpnToResult();
+
+        
+        if (bracketsBalanced()); 
+            this.tokensToReversePolishNotation();
+            this.rpnToResult();
     }
 
+
+    private boolean bracketsBalanced()
+    {
+        int e1 = 0;
+        int e2 = 0;
+        for (int i = 0; i < this.expression.length(); i++) {
+            if (this.expression.charAt(i) == '(') {
+                e1++;
+            } else if (this.expression.charAt(i) == ')') {
+                e2++;
+            }
+        }
+
+        if (e1 == e2) {
+            return true;}
+            else {
+            return false;
+        }
+    }
+
+
+ 
     // Test if token is an operator
     private boolean isOperator(String token) {
-        // find the token in the hash map
         return OPERATORS.containsKey(token);
     }
 
@@ -132,6 +164,8 @@ public class Calculator {
                 case "*":
                 case "/":
                 case "%":
+                case "^":
+                case "RT":
                     // While stack
                     // not empty AND stack top element
                     // and is an operator
@@ -143,10 +177,13 @@ public class Calculator {
                         }
                         break;
                     }
+
                     // Push the new operator on the stack
                     tokenStack.push(token);
                     break;
-                default:    // Default should be a number, there could be test here
+
+
+                    default:    // Default should be a number, there could be test here
                     this.reverse_polish.add(token);
             }
         }
@@ -170,9 +207,12 @@ public class Calculator {
             if (isOperator(token))
             {
                 // Pop the two top entries
-
+                double x = calcStack.pop();
+                double y = calcStack.pop();
                 // Calculate intermediate results
                 result = 0.0;
+                result = finalcalculate(token, x, y);
+
 
                 // Push intermediate result back onto the stack
                 calcStack.push( result );
@@ -187,13 +227,67 @@ public class Calculator {
         this.result = calcStack.pop();
     }
 
+
+    public double finalcalculate (String operator, double x, double y) {
+        // double result = 0; 
+        switch (operator) {
+            case "RT":
+                return Math.pow(x, (1/y));
+            case "+":
+                return x + y;
+            case "-":
+                return x - y;
+            case "*":
+                return x * y;
+            case "/":
+                return x / y;
+            case "%":
+                return x % y;
+            // case "^":
+            //     return Math.pow(x, y);
+            case "PWR":
+                return Math.pow(x, y);
+            // case "sqrt":
+            //     result = Math.sqrt(x,y);
+        default:
+            throw new RuntimeException("Invalid operation");
+        }
+    }
+
+
+    public String calcToString(boolean x) {
+        if (x) {
+        System.out.println("--------");
+        System.out.println("Result: " + this.expression + " = " + this.result);
+        System.out.println("Tokens: " + this.tokens + " , RPN: " + this.reverse_polish);
+        }
+
+        String output = this.expression + " = " + this.result;
+        return output;
+    }
+
+    public String jsonify() {
+        String json = "{ \"Expression\": \"" + this.expression + "\", \"Tokens\": \"" + this.tokens + "\", \"RPN\": \"" + this.reverse_polish + "\", \"Result\": " + this.result + " }";
+        return json;
+    }
+
+
     // Print the expression, terms, and result
     public String toString() {
         return ("Original expression: " + this.expression + "\n" +
                 "Tokenized expression: " + this.tokens.toString() + "\n" +
                 "Reverse Polish Notation: " +this.reverse_polish.toString() + "\n" +
-                "Final result: " + String.format("%.2f", this.result));
-    }
+                "Final result: " + String.format("%.2f", this.result));}
+    
+    public String booleantoString() {
+        if(bracketsBalanced()) {
+            return "parentheses are balanced";
+        }
+        else {
+            return "Error - unbalanced parenthesis";
+        
+        }
+    }            
 
     // Tester method
     public static void main(String[] args) {
@@ -203,17 +297,24 @@ public class Calculator {
 
         System.out.println();
 
-        Calculator parenthesisMath = new Calculator("(100 + 200)  * 3");
-        System.out.println("Parenthesis Math\n" + parenthesisMath);
+        // Calculator sqCalculator = new Calculator("2RT4");
+        // System.out.println("Abs Value\n" + sqCalculator);
 
-        System.out.println();
+        // System.out.println();
 
-        Calculator decimalMath = new Calculator("100.2 - 99.3");
+
+        Calculator decimalMath = new Calculator("90.2 - 400.28");
         System.out.println("Decimal Math\n" + decimalMath);
 
         System.out.println();
 
-        Calculator moduloMath = new Calculator("300 % 200");
+        Calculator RTcalculator = new Calculator("3 RT 8");
+        System.out.println("Root\n" + RTcalculator);
+
+        System.out.println();
+
+
+        Calculator moduloMath = new Calculator("100 % 1200");
         System.out.println("Modulo Math\n" + moduloMath);
 
         System.out.println();
@@ -221,5 +322,22 @@ public class Calculator {
         Calculator divisionMath = new Calculator("300/200");
         System.out.println("Division Math\n" + divisionMath);
 
+        System.out.println();
+
+        Calculator powerMath = new Calculator("90^47980");
+        System.out.println("Power Math\n" + powerMath);
+
+        System.out.println();
+
+        Calculator powerMath2= new Calculator("2 PWR 3");
+        System.out.println("Power Math\n" + powerMath2);
+
+        System.out.println();
+
+        System.out.println("Parentheses imbalance");
+        Calculator balancedBrackets = new Calculator("((90+23)*3");
+       System.out.println("balancedBrackets\n" + balancedBrackets);
+
     }
+
 }
