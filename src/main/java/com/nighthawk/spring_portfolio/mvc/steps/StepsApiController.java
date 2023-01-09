@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.standard.expression.StandardExpressionObjectFactory;
 
 import java.util.*;
 import java.text.SimpleDateFormat;
@@ -25,75 +26,75 @@ public class StepsApiController {
 
 
 
-    @GetMapping("/activeDays/{id}")
-    public ResponseEntity<String> activeDays(@PathVariable long id) {
+    @GetMapping("/stepsInfo/{id}")
+    public ResponseEntity<Steps> activeDays(@PathVariable long id) {
         Optional<Person> optional = repository.findById(id);
         if (optional.isPresent()) {  // Good ID
             Person person = optional.get(); // value from findByID
             Steps steps = new Steps(person);
-            return new ResponseEntity<>(steps.activeDaysToString(), HttpStatus.OK);
-            
+           return new ResponseEntity<>(steps, HttpStatus.OK);
+
         }
         // Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
         //return -1;
     }
 
-    @GetMapping("/averageSteps/{id}")
-    public ResponseEntity<String> averageSteps(@PathVariable long id) {
-        Optional<Person> optional = repository.findById(id);
-        if (optional.isPresent()) {  // Good ID
-            Person person = optional.get(); // value from findByID
-            Steps steps = new Steps(person);
-            return new ResponseEntity<>(steps.averageStepsToString(), HttpStatus.OK);
+    // @GetMapping("/averageSteps/{id}")
+    // public ResponseEntity<String> averageSteps(@PathVariable long id) {
+    //     Optional<Person> optional = repository.findById(id);
+    //     if (optional.isPresent()) {  // Good ID
+    //         Person person = optional.get(); // value from findByID
+    //         Steps steps = new Steps(person);
+    //         return new ResponseEntity<>(steps.averageStepsToString(), HttpStatus.OK);
             
-        }
-        // Bad ID
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
-        //return -1;
-    }
+    //     }
+    //     // Bad ID
+    //     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
+    //     //return -1;
+    // }
 
-    @GetMapping("/averageCalories/{id}")
-    public ResponseEntity<String> averageCalories(@PathVariable long id) {
-        Optional<Person> optional = repository.findById(id);
-        if (optional.isPresent()) {  // Good ID
-            Person person = optional.get(); // value from findByID
-            Steps steps = new Steps(person);
-            return new ResponseEntity<>(steps.averageCaloriesToString(), HttpStatus.OK);
+    // @GetMapping("/averageCalories/{id}")
+    // public ResponseEntity<String> averageCalories(@PathVariable long id) {
+    //     Optional<Person> optional = repository.findById(id);
+    //     if (optional.isPresent()) {  // Good ID
+    //         Person person = optional.get(); // value from findByID
+    //         Steps steps = new Steps(person);
+    //         return new ResponseEntity<>(steps.averageCaloriesToString(), HttpStatus.OK);
             
-        }
-        // Bad ID
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
-        //return -1;
-    }
+    //     }
+    //     // Bad ID
+    //     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
+    //     //return -1;
+    // }
 
-    @GetMapping("/averageMood/{id}")
-    public ResponseEntity<String> averageMood(@PathVariable long id) {
-        Optional<Person> optional = repository.findById(id);
-        if (optional.isPresent()) {  // Good ID
-            Person person = optional.get(); // value from findByID
-            Steps steps = new Steps(person);
-            return new ResponseEntity<>(steps.averageMoodToString(), HttpStatus.OK);
+    // @GetMapping("/averageMood/{id}")
+    // public ResponseEntity<String> averageMood(@PathVariable long id) {
+    //     Optional<Person> optional = repository.findById(id);
+    //     if (optional.isPresent()) {  // Good ID
+    //         Person person = optional.get(); // value from findByID
+    //         Steps steps = new Steps(person);
+    //         return new ResponseEntity<>(steps.averageMoodToString(), HttpStatus.OK);
             
-        }
-        // Bad ID
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
-        //return -1;
-    }
+    //     }
+    //     // Bad ID
+    //     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
+    //     //return -1;
+    // }
 
-    @GetMapping("/activeCheck/{id}")
-    public ResponseEntity<String> activeCheck(@PathVariable long id) {
-        Optional<Person> optional = repository.findById(id);
-        if (optional.isPresent()) {  // Good ID
-            Person person = optional.get(); // value from findByID
-            Steps steps = new Steps(person);
-            return new ResponseEntity<>(steps.activeCheckToString(), HttpStatus.OK);
+    // @GetMapping("/activeCheck/{id}")
+    // public ResponseEntity<String> activeCheck(@PathVariable long id) {
+    //     Optional<Person> optional = repository.findById(id);
+    //     if (optional.isPresent()) {  // Good ID
+    //         Person person = optional.get(); // value from findByID
+    //         Steps steps = new Steps(person);
+    //         return new ResponseEntity<>(steps.activeCheckToString(), HttpStatus.OK);
             
-        }
-        // Bad ID
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
-        //return -1;
-    }
+    //     }
+    //     // Bad ID
+    //     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
+    //     //return -1;
+    // }
 
    
 

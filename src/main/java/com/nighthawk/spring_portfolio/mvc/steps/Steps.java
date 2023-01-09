@@ -64,23 +64,48 @@ public class Steps {
 
     @Column(nullable = true)
     private int totalCalories = 0; 
+
+    @Column(nullable = true)
+    public int activeFinalDays = 0;
+    
+    @Column(nullable = true)
+    public double averageSteps =0;
+
+    @Column(nullable = true)
+    public double  averageCalories =0;
+
+    @Column(nullable = true)
+    public String activeCheck ="";
+
+    @Column(nullable = true)
+   public double averageMood =0;
+
+
+
     
    
     
     // Constructor used when building object from an API
     public Steps(Person person) {
-        this.person = person; 
+        this.person = person;
+        this.activeFinalDays = this.getActiveDays();
+        this.averageSteps = this.getAverageSteps();
+        this.averageCalories = this.getaverageCalories();
+        this.activeCheck = this.getActiveCheck();
+        this.averageMood = this.getAverageMood();
+
     }
 
     
     
 
-    public int activeDays()
+    public int getActiveDays()
         {
-            numActiveDays = person.getStats().keySet().size();
+            this.numActiveDays = person.getStats().keySet().size();
             return numActiveDays;
         }
-    public double averageSteps()
+
+    public double getAverageSteps()
         {   
             
             int dailySteps;
@@ -99,7 +124,7 @@ public class Steps {
             }
         }
 
-        public double averageCalories()
+        public double getaverageCalories()
         {   
             
             int dailyCalories;
@@ -119,8 +144,8 @@ public class Steps {
             }
         }
 
-    public String activeCheck() {
-        double avgSteps = this.averageSteps();
+    public String getActiveCheck() {
+        double avgSteps = this.getAverageSteps();
         String message;
         if (avgSteps >= (double) person.getGoalSteps()) {
             message = ". Good job! You met your goal steps on average";
@@ -133,7 +158,7 @@ public class Steps {
 
     }
     
-        public double averageMood()
+        public double getAverageMood()
         {   
             
             int dailyMood;
@@ -154,25 +179,25 @@ public class Steps {
         }
     
     
-     public String activeDaysToString(){ 
-        return ( "{ \"name\": "  +person.getName()+  ", " + "\"activeDays\": "   + this.activeDays() + " }" );
-     }
+    //  public String activeDaysToString(){ 
+    //     return ( "{ \"name\": "  +person.getName()+  ", " + "\"activeDays\": "   + this.activeDays() + " }" );
+    //  }
 
-     public String averageStepsToString(){ 
-        return ( "{ \"name\": "  +person.getName()+  ", " + "\"averageSteps\": "   + this.averageSteps() + " }" );
-     }
+    //  public String averageStepsToString(){ 
+    //     return ( "{ \"name\": "  +person.getName()+  ", " + "\"averageSteps\": "   + this.averageSteps() + " }" );
+    //  }
 
-     public String averageMoodToString(){ 
-        return ( "{ \"name\": "  +person.getName()+  ", " + "\"averageMood\": "   + this.averageMood() + " }" );
-     }
+    //  public String averageMoodToString(){ 
+    //     return ( "{ \"name\": "  +person.getName()+  ", " + "\"averageMood\": "   + this.averageMood() + " }" );
+    //  }
 
-     public String activeCheckToString(){ 
-        return ( person.getName()+  ", " + "your average steps is " + this.averageSteps() + " and your goal was " + (double) person.getGoalSteps() + this.activeCheck());
-     }
+    //  public String activeCheckToString(){ 
+    //     return ( person.getName()+  ", " + "your average steps is " + this.averageSteps() + " and your goal was " + (double) person.getGoalSteps() + this.activeCheck());
+    //  }
 
-     public String averageCaloriesToString(){ 
-        return ( "{ \"name\": "  +person.getName()+  ", " + "\"averageCalories\": "   + this.averageCalories() + " }" );
-     }
+    //  public String averageCaloriesToString(){ 
+    //     return ( "{ \"name\": "  +person.getName()+  ", " + "\"averageCalories\": "   + this.averageCalories() + " }" );
+    //  }
    
    
     
