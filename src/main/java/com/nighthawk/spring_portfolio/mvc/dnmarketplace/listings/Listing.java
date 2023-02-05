@@ -1,4 +1,4 @@
-package com.nighthawk.spring_portfolio.mvc.dnmarketplace;
+package com.nighthawk.spring_portfolio.mvc.dnmarketplace.listings;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

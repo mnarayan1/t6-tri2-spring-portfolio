@@ -1,4 +1,4 @@
-package com.nighthawk.spring_portfolio.mvc.dnmarketplace;
+package com.nighthawk.spring_portfolio.mvc.dnmarketplace.listings;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
