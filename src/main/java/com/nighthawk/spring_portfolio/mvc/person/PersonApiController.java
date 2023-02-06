@@ -23,6 +23,8 @@ public class PersonApiController {
     // Autowired enables Control to connect POJO Object through JPA
     @Autowired
     private PersonJpaRepository repository;
+    @Autowired // Inject PasswordEncoder
+    private PasswordEncoder passwordEncoder;
 
     /*
      * GET List of People
@@ -78,6 +80,7 @@ public class PersonApiController {
         // A person object WITHOUT ID will create a new record with default roles as
         // student
         Person person = new Person(email, password, name, dob);
+        person.setPassword(passwordEncoder.encode(person.getPassword()));
         repository.save(person);
         return new ResponseEntity<>(email + " is created successfully", HttpStatus.CREATED);
     }
