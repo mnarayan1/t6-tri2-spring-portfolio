@@ -29,7 +29,7 @@ public class PersonApiController {
     /*
      * GET List of People
      */
-    @GetMapping("/")
+    @GetMapping("/getUsers")
     public ResponseEntity<List<Person>> getPeople() {
         return new ResponseEntity<>(repository.findAllByOrderByNameAsc(), HttpStatus.OK);
     }

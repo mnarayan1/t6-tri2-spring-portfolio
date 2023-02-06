@@ -67,7 +67,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/mvc/person/update/**", "/mvc/person/delete/**").authenticated()
                 .antMatchers("/mvc/person/update/**", "/mvc/person/delete/**").authenticated()
-                .antMatchers("/api/person/delete/*", "/api/person/setStats", "/api/person/search")
+                .antMatchers("/api/person/delete/*", "/api/person/setStats", "/api/person/search",
+                        "/api/person/getUsers")
                 .authenticated()
                 .antMatchers("/api/person/post").permitAll()
                 .antMatchers("/api/**").permitAll()
