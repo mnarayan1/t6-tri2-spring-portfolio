@@ -68,7 +68,7 @@ public class PersonViewController {
     public String personUpdateSave(@Valid Person person, BindingResult bindingResult) {
         // Validation of Decorated PersonForm attributes
         if (bindingResult.hasErrors()) {
-            return "mvc/person/update";
+            return "person/update";
         }
         repository.save(person);
         repository.addRoleToPerson(person.getEmail(), "ROLE_STUDENT");
