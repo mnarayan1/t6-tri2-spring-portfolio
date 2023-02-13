@@ -30,4 +30,5 @@ public class Listing {
     private int price;
     private String seller;
     private String description;
+    private String category;
 }
