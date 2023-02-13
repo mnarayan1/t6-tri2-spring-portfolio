@@ -52,6 +52,12 @@ public class ListingController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/search/{name}")
+    public ResponseEntity<List<Listing>> searchJoke(@PathVariable String name) {
+        List<Listing> listings = repository.findByNameIgnoreCase(name);
+        return new ResponseEntity<>(listings,HttpStatus.OK);
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Listing> deleteListing(@PathVariable long id) {
         Optional<Listing> optional = repository.findById(id);
