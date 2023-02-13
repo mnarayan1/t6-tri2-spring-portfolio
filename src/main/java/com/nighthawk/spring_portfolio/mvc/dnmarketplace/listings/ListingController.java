@@ -2,10 +2,14 @@ package com.nighthawk.spring_portfolio.mvc.dnmarketplace.listings;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.nighthawk.spring_portfolio.mvc.person.Person;
+
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController // annotation to simplify the creation of RESTful web services
@@ -24,13 +28,25 @@ public class ListingController {
      * handler methods.
      */
     @GetMapping("/")
-    public ResponseEntity<List<Listing>> getJokes() {
+    public ResponseEntity<List<Listing>> getAllListings() {
         // ResponseEntity returns List of Jokes provide by JPA findAll()
         return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Listing> getListingById(@PathVariable long id) {
+        Optional<Listing> optional = repository.findById(id);
+        if (optional.isPresent()) { // Good ID
+            Listing listing = optional.get(); // value from findByID
+            return new ResponseEntity<>(listing, HttpStatus.OK); // OK HTTP response: status code, headers, and body
+        }
+        // Bad ID
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
     @PostMapping("/create/{name}/{price}/{seller}/{description}")
-    public ResponseEntity<Listing> createJoke(@PathVariable String name, @PathVariable Integer price,
+    public ResponseEntity<Listing> createListing(@PathVariable String name,
+            @PathVariable Integer price,
             @PathVariable String seller, @PathVariable String description) {
         repository.saveAndFlush(new Listing(null, name, price, seller, description));
         return new ResponseEntity<>(HttpStatus.OK);
