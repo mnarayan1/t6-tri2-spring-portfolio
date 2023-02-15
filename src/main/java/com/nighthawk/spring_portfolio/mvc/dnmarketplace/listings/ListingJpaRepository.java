@@ -9,4 +9,5 @@ public interface ListingJpaRepository extends JpaRepository<Listing, Long> {
     // JPA has many built in methods, these few have been prototyped for this
     // application
     List<Listing> findByNameIgnoreCase(String name);
+    List<Listing> findByCategory(String category);
 }

@@ -1,4 +1,5 @@
 package com.nighthawk.spring_portfolio.mvc.dnmarketplace.listings;
+import com.nighthawk.spring_portfolio.mvc.dnmarketplace.listings.ListingJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +46,14 @@ public class ListingController {
         List<Listing> listings = repository.findByNameIgnoreCase(name);
         return new ResponseEntity<>(listings, HttpStatus.OK);
     }
+
+    @GetMapping("/filter/{category}")
+    public ResponseEntity<List<Listing>> filter(@PathVariable String category) {
+        List<Listing> listings = repository.findByCategory(category);
+        return new ResponseEntity<>(listings, HttpStatus.OK);
+    }
+    
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Listing> deleteListing(@PathVariable long id) {
         Optional<Listing> optional = repository.findById(id);
