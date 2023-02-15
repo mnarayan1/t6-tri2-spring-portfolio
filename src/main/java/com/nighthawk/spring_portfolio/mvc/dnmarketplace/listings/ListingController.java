@@ -34,11 +34,15 @@ public class ListingController {
         // Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-    @PostMapping("/create/{name}/{price}/{seller}/{description}/{category}")
-    public ResponseEntity<Listing> createListing(@PathVariable String name,
-            @PathVariable Integer price,
-            @PathVariable String seller, @PathVariable String description, @PathVariable String category) {
-        repository.saveAndFlush(new Listing(null, name, price, seller, description, category));
+    @PostMapping("/create")
+    public ResponseEntity<Listing> createListing(@RequestBody Listing object) {
+        String name = object.getName();
+        String seller = object.getSeller();
+        int price = object.getPrice();
+        String description = object.getDescription();
+        String category = object.getCategory();
+        String image = object.getImage();
+        repository.saveAndFlush(new Listing(null, name, price, seller, description, category, image));
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @GetMapping("/search/{name}")
