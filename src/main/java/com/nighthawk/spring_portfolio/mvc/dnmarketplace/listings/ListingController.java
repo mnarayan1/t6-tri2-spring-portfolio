@@ -76,23 +76,6 @@ public class ListingController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/favorites")
-    public ResponseEntity<List<Listing>> getFavorites()
-    {
-        List<Listing> items = repository.findAll();
-        List<Listing> favoriteItems = new ArrayList<Listing>();
-        for (Listing item : items)
-        {
-            if (item.isFavorite())
-            {
-                favoriteItems.add(item);
-            }
-        }
-
-        // ResponseEntity returns List of Jokes provide by JPA findAll()
-        return new ResponseEntity<>(favoriteItems, HttpStatus.OK);
-    }
-
     @PutMapping("/update/{id}")
     public ResponseEntity<Listing> updateListing(@PathVariable long id, @RequestBody Listing newListing) {
         Optional<Listing> optional = repository.findById(id);
