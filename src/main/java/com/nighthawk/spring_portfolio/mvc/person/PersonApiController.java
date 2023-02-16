@@ -104,7 +104,7 @@ public class PersonApiController {
     /*
      * The personStats API adds stats by Date to Person table
      */
-    @PostMapping(value = "/setStats", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/purchase", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Person> personStats(@RequestBody final Map<String, Object> stat_map) {
         // find ID
         long id = Long.parseLong((String) stat_map.get("id"));
@@ -116,14 +116,18 @@ public class PersonApiController {
             Map<String, Object> attributeMap = new HashMap<>();
             for (Map.Entry<String, Object> entry : stat_map.entrySet()) {
                 // Add all attribute other thaN "date" to the "attribute_map"
-                if (!entry.getKey().equals("date") && !entry.getKey().equals("id"))
+                if (!entry.getKey().equals("object_id") && !entry.getKey().equals("id"))
                     attributeMap.put(entry.getKey(), entry.getValue());
             }
 
             // Set Date and Attributes to SQL HashMap
             Map<String, Map<String, Object>> date_map = new HashMap<>();
-            date_map.put((String) stat_map.get("date"), attributeMap);
-            person.setStats(date_map); // BUG, needs to be customized to replace if existing or append if new
+            // fixed bug, keep existing stats
+            for (String i : person.getStats().keySet()) {
+                date_map.put(i, person.getStats().get(i));
+            }
+            date_map.put((String) stat_map.get("object_id"), attributeMap);
+            person.setStats(date_map);
             repository.save(person); // conclude by writing the stats updates
 
             // return Person with update Stats
@@ -131,5 +135,13 @@ public class PersonApiController {
         }
         // return Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Person searchUser) throws Exception {
+        Person account = repository.findByEmail(searchUser.getEmail());
+
+        return new ResponseEntity<>(account.getId(), HttpStatus.OK);
+
     }
 }

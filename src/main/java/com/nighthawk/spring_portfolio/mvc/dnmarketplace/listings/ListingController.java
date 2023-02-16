@@ -1,11 +1,12 @@
 package com.nighthawk.spring_portfolio.mvc.dnmarketplace.listings;
-import com.nighthawk.spring_portfolio.mvc.dnmarketplace.listings.ListingJpaRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
+
 @RestController // annotation to simplify the creation of RESTful web services
 @RequestMapping("/api/listings") // all requests in file begin with this URI
 public class ListingController {
@@ -13,6 +14,7 @@ public class ListingController {
     // for Database CRUD operations
     @Autowired
     private ListingJpaRepository repository;
+
     /*
      * GET List of Jokes
      *
@@ -24,6 +26,7 @@ public class ListingController {
         // ResponseEntity returns List of Jokes provide by JPA findAll()
         return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<Listing> getListingById(@PathVariable long id) {
         Optional<Listing> optional = repository.findById(id);
@@ -34,6 +37,7 @@ public class ListingController {
         // Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
     @PostMapping("/create")
     public ResponseEntity<Listing> createListing(@RequestBody Listing object) {
         String name = object.getName();
@@ -45,6 +49,7 @@ public class ListingController {
         repository.saveAndFlush(new Listing(null, name, price, seller, description, category, image));
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @GetMapping("/search/{name}")
     public ResponseEntity<List<Listing>> searchJoke(@PathVariable String name) {
         List<Listing> listings = repository.findByNameIgnoreCase(name);
@@ -56,7 +61,6 @@ public class ListingController {
         List<Listing> listings = repository.findByCategory(category);
         return new ResponseEntity<>(listings, HttpStatus.OK);
     }
-    
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Listing> deleteListing(@PathVariable long id) {
@@ -69,6 +73,7 @@ public class ListingController {
         // Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<Listing> updateListing(@PathVariable long id, @RequestBody Listing newListing) {
         Optional<Listing> optional = repository.findById(id);
@@ -85,10 +90,3 @@ public class ListingController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
-
-
-
-
-
-
-
