@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @RestController // annotation to simplify the creation of RESTful web services
@@ -73,6 +74,23 @@ public class ListingController {
         }
         // Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/favorites")
+    public ResponseEntity<List<Listing>> getFavorites()
+    {
+        List<Listing> items = repository.findAll();
+        List<Listing> favoriteItems = new ArrayList<Listing>();
+        for (Listing item : items)
+        {
+            if (item.isFavorite())
+            {
+                favoriteItems.add(item);
+            }
+        }
+
+        // ResponseEntity returns List of Jokes provide by JPA findAll()
+        return new ResponseEntity<>(favoriteItems, HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
