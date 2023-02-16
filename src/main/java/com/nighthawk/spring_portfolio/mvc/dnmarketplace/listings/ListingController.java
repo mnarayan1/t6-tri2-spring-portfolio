@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Optional;
 
 @RestController // annotation to simplify the creation of RESTful web services
@@ -47,8 +46,8 @@ public class ListingController {
         String description = object.getDescription();
         String category = object.getCategory();
         String image = object.getImage();
-        boolean favorite = object.isFavorite();
-        repository.saveAndFlush(new Listing(null, name, price, seller, description, category, image, favorite));
+
+        repository.saveAndFlush(new Listing(null, name, price, seller, description, category, image));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -85,7 +84,6 @@ public class ListingController {
             listing.setPrice(newListing.getPrice()); // value from findByID
             listing.setSeller(newListing.getSeller()); // value from findByID
             listing.setDescription(newListing.getDescription()); // value from findByID
-            listing.setFavorite(newListing.isFavorite()); // value from findByID
             repository.save(listing);
             return new ResponseEntity<>(listing, HttpStatus.OK); // OK HTTP response: status code, headers, and body
         }

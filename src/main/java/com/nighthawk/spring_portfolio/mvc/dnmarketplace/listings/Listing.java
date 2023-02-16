@@ -26,5 +26,4 @@ public class Listing {
     private String description;
     private String category;
     private String image;
-    private boolean favorite;
 }
