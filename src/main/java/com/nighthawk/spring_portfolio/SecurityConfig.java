@@ -1,4 +1,4 @@
-package com.nighthawk.spring_portfolio.security;
+package com.nighthawk.spring_portfolio;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import com.nighthawk.spring_portfolio.mvc.jwt.JwtAuthenticationEntryPoint;
@@ -87,7 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addHeaderWriter(
                         new StaticHeadersWriter("Access-Control-Allow-Methods", "POST", "GET", "OPTIONS", "HEAD"))
                 // .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Origin",
-                // "https://nighthawkcoders.github.io", "http://localhost:4000"))
+                // "https://nighthawkcoders.github.io", "http://localhost:8026"))
                 .and()
                 .formLogin()
                 .loginPage("/login")
