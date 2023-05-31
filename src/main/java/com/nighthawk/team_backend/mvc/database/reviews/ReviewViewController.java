@@ -52,19 +52,18 @@ public class ReviewViewController {
     }
 
     @PostMapping("/database/addreview/{id}")
-    public ResponseEntity<Object> reviewsAdd(@PathVariable("id") Long teamId, @RequestBody String assignment,
-            @RequestBody double score, @RequestBody String ticket, @RequestBody String comments) {
+    public ResponseEntity<Object> reviewsAdd(@PathVariable Long id, @RequestBody PartialReview r) {
 
-        Optional<Team> optional = teamRepo.findById(teamId);
+        Optional<Team> optional = teamRepo.findById(id);
         if (optional.isPresent()) { // Good ID
             Team team = optional.get(); // value from findByID
-            Review review = new Review(assignment, team, score, ticket, comments);
+            Review review = new Review(r.assignment, team, r.score, r.ticket, r.comments);
             reviewRepository.save(review);
-            return new ResponseEntity<>("New review is created successfully for Team:" + teamId, HttpStatus.CREATED);
+            return new ResponseEntity<>("New review is created successfully for Team:" + id, HttpStatus.CREATED);
         }
 
         // Bad ID
-        return new ResponseEntity<>("Team not found in team list - Team:" + teamId, HttpStatus.CREATED);
+        return new ResponseEntity<>("Team not found in team list - Team:" + id, HttpStatus.CREATED);
     }
     // MUST ADD UPDATE AND DELETE FUNCTIONS FOR ALL
 
