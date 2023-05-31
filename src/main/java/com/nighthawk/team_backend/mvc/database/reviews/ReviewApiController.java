@@ -13,6 +13,8 @@ import com.nighthawk.team_backend.mvc.database.team.TeamJpaRepository;
 
 import java.util.*;
 
+
+
 @RestController
 @RequestMapping("/api/review")
 public class ReviewApiController {
@@ -40,19 +42,18 @@ public class ReviewApiController {
         return new ResponseEntity<>(review, HttpStatus.OK);
     }
 
-    /*
-     * POST Aa record by Requesting Parameters from URI
-     */
-
     @PostMapping("/post/{id}")
-    public ResponseEntity<Object> review_result(@PathVariable Long id, @RequestBody String assignment,
-    @RequestBody double score, @RequestBody String ticket, @RequestBody String comments) {
+    public ResponseEntity<Object> postReview(@PathVariable Long id, @RequestBody PartialReview r) {
         Optional<Team> optional = jparepository.findById(id);
-        Team team = optional.get(); // value from findByID
-        Review review = new Review(assignment, team, score, ticket, comments);
-
-        reviewjparepository.save(review);
-        return new ResponseEntity<>("Review for club: " + team.getNames() + " was created successfully",
+        if (optional.isPresent()) { // Good ID
+            Team team = optional.get(); // value from findByID
+            Review review = new Review(r.assignment, team, r.score, r.ticket, r.comments);
+            reviewjparepository.save(review);
+            return new ResponseEntity<>("Review for club: " + team.getNames() + " was created successfully",
                 HttpStatus.CREATED);
+        }
+
+        // Bad ID
+        return new ResponseEntity<>("Team not found in team list - Team:" + id, HttpStatus.CREATED);
     }
 }
